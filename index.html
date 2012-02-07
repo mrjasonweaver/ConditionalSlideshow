@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0;">	
+<title>Conditional Slideshow for Mobile-First Responsive Web Design</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" / >
+
+</head>
+  <body>		
+	<div class="container">		
+		<h1 class="page-title">A Conditional Slideshow for Mobile-First Responsive Web Design</h1>
+			
+		<section class="featured-content">
+			<div id="feature-container">
+			</div>
+			<ol class="featured-stories">
+			<li class="media-box example">
+				<a href="http://flic.kr/p/bkErUB" id="l1" class="mb-link">			
+					<div class="mb-inner">
+						<img src="images/coadc-mobile-thumb.jpg" alt="coadc on a mobile phone" class="mb-img" width=100px height=100px />
+						<h2>COADC</h2>						
+						<p class="mb-content"> A mobile-first responsive redesign at Texas A&ampM</p>
+				</div>
+				</a>
+			</li>
+
+			<li class="media-box example">
+				<a href="http://flic.kr/p/aGw5YX" id="l2" class="mb-link">				
+					<div class="mb-inner">
+						<img src="images/car-thumb.jpg" alt="car" class="mb-img" width=100px height=100px />
+						<h2>Karmann Ghia</h2>						
+						<p class="mb-content">The classic VW stranded on the side of Hwy 77</p>
+					</div>
+				</a>				
+			</li>
+	
+			<li class="media-box example">
+				<a href="http://flic.kr/p/b1azjB" id="l3" class="mb-link">				
+					<div class="mb-inner">
+						<img src="images/buzz-thumb.jpg" alt="Buzz Lightyear" class="mb-img" width=100px height=100px />
+						<h2>Buzz Action</h2>						
+						<p class="mb-content">Something clever about Toy Story's Buzz Lightyear</p>
+					</div>
+				</a>				
+			</li>	
+		</ol>
+											
+		</section> 
+	<footer role="site-info">
+		<p><a href="http://jasonweaver.name">Jason Weaver</a> made this. <a href="http://jasonweaver.name/blog/slideshow-redux/">Read the post</a> about the technique.</p>
+	</footer>
+	</div>
+	
+	<script> 
+	window.onload = function () {
+        var feature = document.getElementById('feature-container'),
+            display = window.getComputedStyle(feature,null).getPropertyValue('display');
+        if (display == 'block') {
+			displayFeatures();
+			getLinks();
+        }
+    }(this);
+	
+	function getHTTPObject() {
+		var xhr = new XMLHttpRequest();
+		return xhr;
+	}
+	
+	function displayFeatures() {
+		var request = getHTTPObject();
+			if (request) {
+				request.onreadystatechange = function() {
+					displayResponse(request);
+				};
+				request.open("GET","slides.html", true);
+				request.send(null);
+			}
+
+	}
+	
+	function displayResponse(request) {
+		if (request.readyState == 4) {
+			if (request.status == 200 || request.status == 304) {
+				var feature_container = document.getElementById("feature-container");
+				feature_container.innerHTML = request.responseText;
+			}
+		}
+	}
+		
+	// make a simple feature slideshow by adding a class name when clicked
+	function addClass(obj) {
+		var currentId = obj.getAttribute("id"),
+		slide1 = document.getElementById("slide1"),
+		slide2 = document.getElementById("slide2"),
+		slide3 = document.getElementById("slide3"),						
+		currentSlideClass1 = slide1.getAttribute("class"),
+		currentSlideClass2 = slide2.getAttribute("class"),			
+		currentSlideClass3 = slide3.getAttribute("class");
+					
+		if (currentId == "l1") {
+			slide1.setAttribute("class", "active");
+			slide2.removeAttribute("class", "active");						
+			slide3.removeAttribute("class", "active");
+		}
+
+		else if (currentId == "l2") {
+			slide1.removeAttribute("class", "active");
+			slide2.setAttribute("class", "active");						
+			slide3.removeAttribute("class", "active");
+		}
+		else {
+			slide1.removeAttribute("class", "active");
+			slide2.removeAttribute("class", "active");						
+			slide3.setAttribute("class", "active");
+		}
+	}	
+	// attach onclick events	
+	function getLinks() {
+		var links = document.getElementsByTagName("a");
+		for (var i=0; i<links.length; i++) {
+			if (links[i].getAttribute("class") == "mb-link") {
+				links[i].onclick = function() {
+					addClass(this);
+					return false;
+				}	
+			}				
+		}							
+ 	}	
+
+	</script>
+	<!-- end scripts-->
+
+</body>
+</html>
